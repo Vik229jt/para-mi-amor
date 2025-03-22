@@ -1,0 +1,158 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #fff8dc, #ffe033);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #f57f17;
+    margin-bottom: 20px;
+}
+
+.selector {
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+select, button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+button {
+    background: #f57f17;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-left: 10px;
+}
+
+button:hover {
+    background: #ff6f00;
+}
+
+#message {
+    font-size: 1.4rem;
+    color: #f57f17;
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+.garden {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    max-width: 90%;
+}
+
+.flower {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    animation: float 4s infinite ease-in-out;
+}
+
+.petal {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: #ffeb3b;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 200, 0, 0.6);
+}
+
+.center {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #ff9800;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 140, 0, 0.7);
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+3. script.js
+javascript
+Copiar
+Editar
+const garden = document.getElementById('garden');
+const submitButton = document.getElementById('submit');
+const select = document.getElementById('flowerChoice');
+const message = document.getElementById('message');
+
+const petalPositions = [
+    { top: '0px', left: '12px' },
+    { top: '12px', left: '0px' },
+    { top: '12px', left: '24px' },
+    { top: '24px', left: '12px' },
+];
+
+function createFlower() {
+    const flower = document.createElement('div');
+    flower.classList.add('flower');
+
+    petalPositions.forEach(pos => {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+        petal.style.top = pos.top;
+        petal.style.left = pos.left;
+        flower.appendChild(petal);
+    });
+
+    const center = document.createElement('div');
+    center.classList.add('center');
+    center.style.top = '17px';
+    center.style.left = '17px';
+    flower.appendChild(center);
+
+    garden.appendChild(flower);
+}
+
+submitButton.addEventListener('click', () => {
+    garden.innerHTML = '';
+    message.textContent = '';
+
+    const value = select.value;
+    let flowerCount = 0;
+
+    if (value === 'ninguna') {
+        flowerCount = 1001;
+    } else if (value === 'pocas') {
+        flowerCount = 2001;
+    } else if (value === 'muchas') {
+        flowerCount = 5001;
+    } else {
+        alert('Por favor selecciona una opción.');
+        return;
+    }
+
+    message.textContent = '¡Te mereces todas las flores del mundo 🌼🌸!';
+
+    let i = 0;
+    const interval = setInterval(() => {
+        createFlower();
+        i++;
+        if (i >= flowerCount) {
+            clearInterval(interval);
+        }
+    }, 1); // Velocidad rápida
+});
